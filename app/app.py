@@ -18,6 +18,6 @@ def hello_world():
         'service': 'DevOps Sample Service',
         'version': '1.0.0'
     })
-
+ # new text
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
