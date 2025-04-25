@@ -1,4 +1,3 @@
-# .github/workflows/image-vuln-scan.yml
 name: Docker Image Vulnerability Scan
 
 on:
@@ -28,7 +27,7 @@ jobs:
       run: |
         docker build -t myimage:latest .
 
-    - name: Scan image with Trivy
+    - name: Scan image with Trivy (logs output)
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: 'myimage:latest'
@@ -38,16 +37,15 @@ jobs:
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
 
-    - name: Upload Trivy report
-      if: always()
+    - name: Generate full JSON report with Trivy
       run: |
         docker run --rm -v $(pwd):/app aquasec/trivy image \
           --format json \
-          -o trivy-report.json \
+          -o /app/trivy-report.json \
           myimage:latest
 
-    - name: Upload scan report as artifact
-      uses: actions/upload-artifact@v3
+    - name: Upload Trivy report as artifact
+      uses: actions/upload-artifact@v4
       with:
         name: trivy-scan-report
         path: trivy-report.json
